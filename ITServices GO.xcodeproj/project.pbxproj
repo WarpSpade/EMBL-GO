@@ -14,6 +14,11 @@
 		1406384B1EC5A43E00897452 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 140638491EC5A43E00897452 /* LaunchScreen.storyboard */; };
 		140638561EC5A43E00897452 /* ITServices_GOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140638551EC5A43E00897452 /* ITServices_GOTests.swift */; };
 		140638611EC5A43F00897452 /* ITServices_GOUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140638601EC5A43F00897452 /* ITServices_GOUITests.swift */; };
+		140638711EC5AC7200897452 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140638701EC5AC7200897452 /* QRViewController.swift */; };
+		145D1C0C1EC9AE4000FA6C07 /* MonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C0B1EC9AE4000FA6C07 /* MonViewController.swift */; };
+		145D1C0E1EC9B5A200FA6C07 /* Mon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C0D1EC9B5A200FA6C07 /* Mon.swift */; };
+		145D1C101EC9BB2C00FA6C07 /* MonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */; };
+		145D1C121EC9E9BE00FA6C07 /* MonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +52,11 @@
 		1406385C1EC5A43E00897452 /* ITServices GOUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ITServices GOUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		140638601EC5A43F00897452 /* ITServices_GOUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITServices_GOUITests.swift; sourceTree = "<group>"; };
 		140638621EC5A43F00897452 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		140638701EC5AC7200897452 /* QRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
+		145D1C0B1EC9AE4000FA6C07 /* MonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonViewController.swift; sourceTree = "<group>"; };
+		145D1C0D1EC9B5A200FA6C07 /* Mon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mon.swift; sourceTree = "<group>"; };
+		145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonTableViewCell.swift; sourceTree = "<group>"; };
+		145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +107,17 @@
 		1406383F1EC5A43E00897452 /* ITServices GO */ = {
 			isa = PBXGroup;
 			children = (
-				140638401EC5A43E00897452 /* AppDelegate.swift */,
-				140638421EC5A43E00897452 /* ViewController.swift */,
 				140638441EC5A43E00897452 /* Main.storyboard */,
 				140638471EC5A43E00897452 /* Assets.xcassets */,
 				140638491EC5A43E00897452 /* LaunchScreen.storyboard */,
 				1406384C1EC5A43E00897452 /* Info.plist */,
+				140638401EC5A43E00897452 /* AppDelegate.swift */,
+				140638421EC5A43E00897452 /* ViewController.swift */,
+				140638701EC5AC7200897452 /* QRViewController.swift */,
+				145D1C0B1EC9AE4000FA6C07 /* MonViewController.swift */,
+				145D1C0D1EC9B5A200FA6C07 /* Mon.swift */,
+				145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */,
+				145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */,
 			);
 			path = "ITServices GO";
 			sourceTree = "<group>";
@@ -193,6 +208,7 @@
 				TargetAttributes = {
 					1406383C1EC5A43E00897452 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = N4BNJ9HX34;
 						ProvisioningStyle = Automatic;
 					};
 					140638501EC5A43E00897452 = {
@@ -259,8 +275,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				145D1C121EC9E9BE00FA6C07 /* MonTableViewController.swift in Sources */,
 				140638431EC5A43E00897452 /* ViewController.swift in Sources */,
 				140638411EC5A43E00897452 /* AppDelegate.swift in Sources */,
+				145D1C101EC9BB2C00FA6C07 /* MonTableViewCell.swift in Sources */,
+				140638711EC5AC7200897452 /* QRViewController.swift in Sources */,
+				145D1C0C1EC9AE4000FA6C07 /* MonViewController.swift in Sources */,
+				145D1C0E1EC9B5A200FA6C07 /* Mon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N4BNJ9HX34;
 				INFOPLIST_FILE = "ITServices GO/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.embl.ITServices-GO";
@@ -424,6 +446,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N4BNJ9HX34;
 				INFOPLIST_FILE = "ITServices GO/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.embl.ITServices-GO";
@@ -505,6 +528,7 @@
 				140638671EC5A43F00897452 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		140638681EC5A43F00897452 /* Build configuration list for PBXNativeTarget "ITServices GOTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +537,7 @@
 				1406386A1EC5A43F00897452 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1406386B1EC5A43F00897452 /* Build configuration list for PBXNativeTarget "ITServices GOUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +546,7 @@
 				1406386D1EC5A43F00897452 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
