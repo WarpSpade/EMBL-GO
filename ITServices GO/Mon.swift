@@ -27,7 +27,7 @@ class Mon: NSObject, NSCoding {
         static let name = "name"
         static let id = "id"
         static let not_found_image = "not_found_image"
-        static let found_image = "found"
+        static let found_image = "found_image"
         static let fact = "fact"
         static let found = "found"
         static let map_coords = "map_coords"
@@ -36,7 +36,7 @@ class Mon: NSObject, NSCoding {
     //MARK: Archiving Paths
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("mon")
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("Mon")
     
     init?(name: String, not_found: UIImage?, found: UIImage?, fact: String, map_coords: Point, id: String, is_found: Bool) {
         guard !name.isEmpty else {
@@ -102,10 +102,10 @@ class Mon: NSObject, NSCoding {
         let not_found_image = aDecoder.decodeObject(forKey: PropertyKey.not_found_image) as? UIImage
         let found_image = aDecoder.decodeObject(forKey: PropertyKey.found_image) as? UIImage
         let fact = aDecoder.decodeObject(forKey: PropertyKey.fact) as? String
-        let found = aDecoder.decodeObject(forKey: PropertyKey.found) as? Bool
+        let found = aDecoder.decodeBool(forKey: PropertyKey.found)
         let map_coords = aDecoder.decodeObject(forKey: PropertyKey.map_coords) as? Point
         
-        self.init(name: name, not_found: not_found_image, found: found_image, fact: fact!, map_coords: map_coords!, id: id!, is_found: found!)
+        self.init(name: name, not_found: not_found_image, found: found_image, fact: fact!, map_coords: map_coords!, id: id!, is_found: found)
     }
 }
 

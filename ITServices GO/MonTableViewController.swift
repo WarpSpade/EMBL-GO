@@ -22,7 +22,6 @@ class MonTableViewController: UITableViewController {
         } else {
             // Load the pokemon
             InitMon()
-            saveMon()
         }
         
         //Create alert
