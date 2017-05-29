@@ -19,9 +19,6 @@ class MonTableViewController: UITableViewController {
         
         if let savedMon = loadMon() {
             mon += savedMon
-        } else {
-            // Load the pokemon
-            InitMon()
         }
         
         //Create alert
@@ -64,7 +61,7 @@ class MonTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Caught: 0/14"
+        return "Caught: \(getCaught())/\(mon.count)"
     }
     
     
@@ -112,7 +109,9 @@ class MonTableViewController: UITableViewController {
         let monster = mon[indexPath.row]
         if monster.isFound() {
             // Segue to the second view controller
-            self.performSegue(withIdentifier: "showDetail", sender: self)
+            let cell = tableView.cellForRow(at: indexPath)
+            self.performSegue(withIdentifier: "showDetail", sender: cell)
+            os_log("Performed segue 1")
         } else {
             self.present(alertController, animated: true)
         }
@@ -142,42 +141,21 @@ class MonTableViewController: UITableViewController {
     
     //MARK: Private Methods
     
-    private func InitMon() {
-        
-        let bulbPhoto = UIImage(named:"bulb")
-        
-        guard let bulb = Mon(name: "Bulbasaur", not_found: bulbPhoto, found: bulbPhoto, fact: "Fun fact", map_coords: (0, 0), id: "1", is_found: false)
-            else {
-                fatalError("Unable to instantiate Bulbasaur")
-        }
-        mon += [bulb]
-    }
-    
-    private func foundMonWith(Id: String){
-        let monster = getMonWith(Id: Id)!
-        monster.setFound(found: true)
-        saveMon()
-    }
     
     private func loadMon() -> [Mon]? {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Mon.ArchiveURL.path) as? [Mon]
     }
     
-    private func saveMon() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(mon, toFile: Mon.ArchiveURL.path)
-        if isSuccessfulSave {
-            os_log("Mon successfully saved.", log: OSLog.default, type: .error)
-        } else {
-            os_log("Failed to save mon...", log: OSLog.default, type: .error)
-        }
-    }
-    
-    private func getMonWith(Id: String) -> Mon?{
-        for monster in mon {
-            if monster.getId() == Id {
-                return monster
+    private func getCaught() -> Int {
+        var caught = 0
+        if mon.count > 0 {
+            for monster in mon {
+                if monster.isFound() {
+                    caught += 1
+                }
             }
         }
-        return nil
+        return caught
     }
+    
 }

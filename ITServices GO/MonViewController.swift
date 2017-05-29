@@ -13,6 +13,7 @@ class MonViewController: UIViewController {
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var caught_message: UILabel!
     @IBOutlet weak var fact: UITextView!
+    @IBOutlet weak var black: UIImageView!
     
     var mon: Mon?
     
@@ -20,8 +21,10 @@ class MonViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         image.image = (mon?.getFoundImage())!
-        caught_message.text = "You caught a \(String(describing: mon?.getName()))"
+        caught_message.text = "You caught a \(mon!.getName())!"
         fact.text = mon?.getFact()
+        caught_message.layer.masksToBounds = true
+        caught_message.layer.cornerRadius = 14
     }
     
     override func didReceiveMemoryWarning() {

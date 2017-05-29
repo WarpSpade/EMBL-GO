@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import os.log
 
 class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
@@ -16,9 +17,17 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     var videoPreviewLayer:AVCaptureVideoPreviewLayer?
     var qrCodeFrameView:UIView?
     
+    var mon = [Mon]()
+    var monID: String?
+    var hasBeenFound = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let savedMon = loadMon() {
+            mon += savedMon
+        }
         
         // Get an instance of the AVCaptureDevice class to initialize a device object and prov
         let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
@@ -71,6 +80,20 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        guard let monDetailViewController = segue.destination as? MonViewController
+            else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+        }
+        // Save that the mon was found
+        foundMonWith(Id: monID!)
+        let selectedMon = getMonWith(Id: monID!)
+        monDetailViewController.mon = selectedMon
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -94,10 +117,46 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
             if metadataObj.stringValue != nil {
-                messagelabel.text = metadataObj.stringValue
-                performSegue(withIdentifier: "foundMon", sender: self)
+                if (1...(mon.count + 1)) ~= (Int(metadataObj.stringValue)!) {
+                    monID = metadataObj.stringValue
+                    if hasBeenFound == false {
+                        hasBeenFound = true
+                        performSegue(withIdentifier: "foundMon", sender: self)
+                    }
+                } else {
+                    self.messagelabel.text = "Not a valid QR"
+                }
             }
         }
     }
     
+    private func loadMon() -> [Mon]? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Mon.ArchiveURL.path) as? [Mon]
+    }
+    
+    private func getMonWith(Id: String) -> Mon?{
+        for monster in mon {
+            if monster.getId() == Id {
+                return monster
+            }
+        }
+        return nil
+    }
+    
+    private func foundMonWith(Id: String){
+        let monster = getMonWith(Id: Id)!
+        monster.setFound(found: true)
+        saveMon()
+    }
+    
+    private func saveMon() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(mon, toFile: Mon.ArchiveURL.path)
+        if isSuccessfulSave {
+            os_log("Mon successfully saved.", log: OSLog.default, type: .error)
+        } else {
+            os_log("Failed to save mon...", log: OSLog.default, type: .error)
+        }
+    
+    
+    }
 }

@@ -11,15 +11,12 @@ import os.log
 
 class Mon: NSObject, NSCoding {
     
-    typealias Point = (Int, Int)
-    
     var id: String
     var found: Bool
     var name: String
     var not_found_image: UIImage?
     var found_image: UIImage?
     var fact: String
-    var map_coords: Point
     
     //MARK: Properties
     
@@ -30,7 +27,6 @@ class Mon: NSObject, NSCoding {
         static let found_image = "found_image"
         static let fact = "fact"
         static let found = "found"
-        static let map_coords = "map_coords"
     }
     
     //MARK: Archiving Paths
@@ -38,7 +34,7 @@ class Mon: NSObject, NSCoding {
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("Mon")
     
-    init?(name: String, not_found: UIImage?, found: UIImage?, fact: String, map_coords: Point, id: String, is_found: Bool) {
+    init?(name: String, not_found: UIImage?, found: UIImage?, fact: String, id: String, is_found: Bool) {
         guard !name.isEmpty else {
             return nil
         }
@@ -48,7 +44,6 @@ class Mon: NSObject, NSCoding {
         self.found_image = found
         self.fact = fact
         self.found = is_found
-        self.map_coords = map_coords
     }
     
     func isFound() -> Bool {
@@ -88,7 +83,6 @@ class Mon: NSObject, NSCoding {
         aCoder.encode(found_image, forKey: PropertyKey.found_image)
         aCoder.encode(fact, forKey: PropertyKey.fact)
         aCoder.encode(found, forKey: PropertyKey.found)
-        aCoder.encode(map_coords, forKey: PropertyKey.map_coords)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -103,9 +97,14 @@ class Mon: NSObject, NSCoding {
         let found_image = aDecoder.decodeObject(forKey: PropertyKey.found_image) as? UIImage
         let fact = aDecoder.decodeObject(forKey: PropertyKey.fact) as? String
         let found = aDecoder.decodeBool(forKey: PropertyKey.found)
-        let map_coords = aDecoder.decodeObject(forKey: PropertyKey.map_coords) as? Point
         
-        self.init(name: name, not_found: not_found_image, found: found_image, fact: fact!, map_coords: map_coords!, id: id!, is_found: found)
+        if id == nil {
+            return nil
+        } else {
+            self.init(name: name, not_found: not_found_image!, found: found_image!, fact: fact!, id: id!, is_found: found)
+        }
+            
+        
     }
 }
 

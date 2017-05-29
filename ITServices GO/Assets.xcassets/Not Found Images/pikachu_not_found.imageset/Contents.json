@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "pokeball_black_border.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "pikachu_not_found.png",
       "scale" : "2x"
     },
     {
