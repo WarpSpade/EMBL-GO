@@ -19,6 +19,7 @@
 		145D1C0E1EC9B5A200FA6C07 /* Mon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C0D1EC9B5A200FA6C07 /* Mon.swift */; };
 		145D1C101EC9BB2C00FA6C07 /* MonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */; };
 		145D1C121EC9E9BE00FA6C07 /* MonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */; };
+		E9C265541EDC09D0004F743A /* StartPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C265531EDC09D0004F743A /* StartPageViewController.swift */; };
 		E9DF74D21ED86C0A008B2046 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DF74D11ED86C0A008B2046 /* User.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		145D1C0D1EC9B5A200FA6C07 /* Mon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mon.swift; sourceTree = "<group>"; };
 		145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonTableViewCell.swift; sourceTree = "<group>"; };
 		145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonTableViewController.swift; sourceTree = "<group>"; };
+		E9C265531EDC09D0004F743A /* StartPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartPageViewController.swift; sourceTree = "<group>"; };
 		E9DF74D11ED86C0A008B2046 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 				145D1C0F1EC9BB2C00FA6C07 /* MonTableViewCell.swift */,
 				145D1C111EC9E9BE00FA6C07 /* MonTableViewController.swift */,
 				E9DF74D11ED86C0A008B2046 /* User.swift */,
+				E9C265531EDC09D0004F743A /* StartPageViewController.swift */,
 			);
 			path = "ITServices GO";
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				140638431EC5A43E00897452 /* ViewController.swift in Sources */,
 				140638411EC5A43E00897452 /* AppDelegate.swift in Sources */,
 				145D1C101EC9BB2C00FA6C07 /* MonTableViewCell.swift in Sources */,
+				E9C265541EDC09D0004F743A /* StartPageViewController.swift in Sources */,
 				E9DF74D21ED86C0A008B2046 /* User.swift in Sources */,
 				140638711EC5AC7200897452 /* QRViewController.swift in Sources */,
 				145D1C0C1EC9AE4000FA6C07 /* MonViewController.swift in Sources */,

@@ -17,6 +17,7 @@ class Mon: NSObject, NSCoding {
     var not_found_image: UIImage?
     var found_image: UIImage?
     var fact: String
+    var stats: String
     
     //MARK: Properties
     
@@ -27,6 +28,7 @@ class Mon: NSObject, NSCoding {
         static let found_image = "found_image"
         static let fact = "fact"
         static let found = "found"
+        static let stats = "stats"
     }
     
     //MARK: Archiving Paths
@@ -34,7 +36,7 @@ class Mon: NSObject, NSCoding {
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("Mon")
     
-    init?(name: String, not_found: UIImage?, found: UIImage?, fact: String, id: String, is_found: Bool) {
+    init?(name: String, not_found: UIImage?, found: UIImage?, fact: String, id: String, is_found: Bool, stats: String) {
         guard !name.isEmpty else {
             return nil
         }
@@ -44,6 +46,7 @@ class Mon: NSObject, NSCoding {
         self.found_image = found
         self.fact = fact
         self.found = is_found
+        self.stats = stats
     }
     
     func isFound() -> Bool {
@@ -74,6 +77,10 @@ class Mon: NSObject, NSCoding {
         return self.fact
     }
     
+    func getStats() -> String {
+        return self.stats
+    }
+    
     //MARK: NSCoding
     
     func encode(with aCoder: NSCoder) {
@@ -83,12 +90,13 @@ class Mon: NSObject, NSCoding {
         aCoder.encode(found_image, forKey: PropertyKey.found_image)
         aCoder.encode(fact, forKey: PropertyKey.fact)
         aCoder.encode(found, forKey: PropertyKey.found)
+        aCoder.encode(stats, forKey: PropertyKey.stats)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         guard let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String
             else {
-                os_log("Unable to decode the name for a Meal object.", log: OSLog.default,
+                os_log("Unable to decode the name for a Mon object.", log: OSLog.default,
                        type: .debug)
                 return nil
         }
@@ -97,13 +105,13 @@ class Mon: NSObject, NSCoding {
         let found_image = aDecoder.decodeObject(forKey: PropertyKey.found_image) as? UIImage
         let fact = aDecoder.decodeObject(forKey: PropertyKey.fact) as? String
         let found = aDecoder.decodeBool(forKey: PropertyKey.found)
+        let stats = aDecoder.decodeObject(forKey: PropertyKey.stats) as? String
         
         if id == nil {
             return nil
         } else {
-            self.init(name: name, not_found: not_found_image!, found: found_image!, fact: fact!, id: id!, is_found: found)
+            self.init(name: name, not_found: not_found_image!, found: found_image!, fact: fact!, id: id!, is_found: found, stats: stats!)
         }
-            
         
     }
 }

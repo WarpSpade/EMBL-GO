@@ -12,17 +12,24 @@ import os.log
 class MonViewController: UIViewController {
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var caught_message: UILabel!
-    @IBOutlet weak var fact: UITextView!
     @IBOutlet weak var black: UIImageView!
+    @IBOutlet weak var stats: UILabel!
+    @IBOutlet weak var fact: UILabel!
     
     var mon: Mon?
+    var just_found = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         image.image = (mon?.getFoundImage())!
-        caught_message.text = "You caught a \(mon!.getName())!"
+        if (just_found){
+                caught_message.text = "You caught a \(mon!.getName())!"
+        } else {
+            caught_message.text = "\(mon!.getName())"
+        }
         fact.text = mon?.getFact()
+        stats.text = mon?.getStats()
         caught_message.layer.masksToBounds = true
         caught_message.layer.cornerRadius = 14
     }

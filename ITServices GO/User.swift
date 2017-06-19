@@ -12,15 +12,15 @@ import os.log
 class User: NSObject, NSCoding {
     
     var user_name: String
-    var email: String
-    var start_time: Int
+    var start_time: Date
+    var end_time: Date?
     
     //MARK: Properties
     
     struct PropertyKey {
         static let user_name = "username"
         static let start_time = "start_time"
-        static let email = "email"
+        static let end_time = "end_time"
     }
     
     //MARK: Archiving Paths
@@ -28,37 +28,48 @@ class User: NSObject, NSCoding {
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("User")
     
-    init?(user_name: String, start_time: Int, email: String) {
+    init?(user_name: String, start_time: Date, end_time: Date?) {
         guard !user_name.isEmpty else {
             return nil
         }
         self.user_name = user_name
         self.start_time = start_time
-        self.email = email
+        self.end_time = end_time
     }
     
     func getName() -> String {
         return self.user_name
     }
     
-    func getStart() -> Int {
-        return self.start_time
+    func getStartTimeAsString() -> String {
+        let calendar = Calendar.current
+        
+        let hour = calendar.component(.hour, from: self.start_time)
+        let minutes = calendar.component(.minute, from: self.start_time)
+        let seconds = calendar.component(.second, from: self.start_time)
+        
+        return "\(hour):\(minutes):\(seconds)"
     }
     
-    func setEmail(email: String) {
-        self.email = email
+    func getStartTime() -> Date {
+        return start_time
     }
     
-    func getEmail() -> String {
-        return self.email
+    func getEndTime() -> Date? {
+        return end_time
     }
+    
+    func setEndTime(date: Date) {
+        self.end_time = date
+    }
+    
     
     //MARK: NSCoding
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(user_name, forKey: PropertyKey.user_name)
         aCoder.encode(start_time, forKey: PropertyKey.start_time)
-        aCoder.encode(email, forKey: PropertyKey.email)
+        aCoder.encode(end_time, forKey: PropertyKey.end_time)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -68,13 +79,13 @@ class User: NSObject, NSCoding {
                        type: .debug)
                 return nil
         }
-        let email = aDecoder.decodeObject(forKey: PropertyKey.email) as? String
-        let start_time = aDecoder.decodeInteger(forKey: PropertyKey.start_time)
+        let start_time = aDecoder.decodeObject(forKey: PropertyKey.start_time) as? Date
+        let end_time = aDecoder.decodeObject(forKey: PropertyKey.end_time) as? Date
         
-        if email == nil {
+        if start_time == nil {
             return nil
         } else {
-            self.init(user_name: name, start_time: start_time, email: email!)
+            self.init(user_name: name, start_time: start_time!, end_time: end_time)
         }
         
         

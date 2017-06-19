@@ -20,14 +20,11 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     var mon = [Mon]()
     var monID: String?
     var hasBeenFound = false
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        if let savedMon = loadMon() {
-            mon += savedMon
-        }
         
         // Get an instance of the AVCaptureDevice class to initialize a device object and prov
         let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
@@ -80,6 +77,16 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if let savedMon = loadMon() {
+            mon = savedMon
+        }
+        
+        self.user = loadUser()
+        
+        hasBeenFound = false
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
@@ -87,11 +94,20 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
         }
+        let previousCaught = self.getCaught()
+        print(previousCaught)
         // Save that the mon was found
         foundMonWith(Id: monID!)
+        let currentCaught = self.getCaught()
+        print(currentCaught)
+        if (previousCaught == (mon.count - 1) && currentCaught == (mon.count)) {
+            let end_time = Date()
+            user?.setEndTime(date: end_time)
+            saveUser()
+        }
         let selectedMon = getMonWith(Id: monID!)
         monDetailViewController.mon = selectedMon
-        
+        monDetailViewController.just_found = true        
     }
     
     override func didReceiveMemoryWarning() {
@@ -143,10 +159,30 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         return nil
     }
     
+    private func getCaught() -> Int {
+        var caught = 0
+        if mon.count > 0 {
+            for monster in mon {
+                if monster.isFound() {
+                    caught += 1
+                }
+            }
+        }
+        return caught
+    }
+
     private func foundMonWith(Id: String){
         let monster = getMonWith(Id: Id)!
+        let prevCaught = getCaught()
+        
         monster.setFound(found: true)
         saveMon()
+        
+        let newCaught = getCaught()
+        if (prevCaught == (mon.count - 1) && newCaught == mon.count) {
+            sendEndTimeToDatabase()
+        }
+        sendCaughtToDatabase()
     }
     
     private func saveMon() {
@@ -156,7 +192,54 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         } else {
             os_log("Failed to save mon...", log: OSLog.default, type: .error)
         }
-    
-    
     }
+    
+    private func loadUser() -> User {
+        return (NSKeyedUnarchiver.unarchiveObject(withFile: User.ArchiveURL.path) as? User)!
+    }
+    
+    func saveUser() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(user!, toFile: User.ArchiveURL.path)
+        if isSuccessfulSave {
+            os_log("User successfully saved.", log: OSLog.default, type: .error)
+        } else {
+            os_log("Failed to save user...", log: OSLog.default, type: .error)
+        }
+    }
+    
+    private func sendCaughtToDatabase() {
+        var request = URLRequest(url: URL(string: "https://www.thisismylink.com/postName.php")!)
+        request.httpMethod = "POST"
+        let postString = "name=\((user?.getName())!)&caught=\(getCaught())"
+        request.httpBody = postString.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let _ = data, error == nil else {          // check for fundamental networking error
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+            }
+        }
+        task.resume()
+    }
+    
+    private func sendEndTimeToDatabase() {
+        var request = URLRequest(url: URL(string: "https://www.thisismylink.com/postName.php")!)
+        request.httpMethod = "POST"
+        let postString = "name=\((user?.getName())!)&end_time=\(Date())"
+        request.httpBody = postString.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let _ = data, error == nil else {          // check for fundamental networking error
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                self.sendEndTimeToDatabase()
+            }
+        }
+        task.resume()
+    }
+    
 }
