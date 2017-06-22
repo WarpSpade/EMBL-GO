@@ -137,10 +137,10 @@ class MonTableViewController: UITableViewController {
         
         let selectedMon = mon[indexPath.row]
         monDetailViewController.mon = selectedMon
-        
     }
     
     //MARK: Private Methods
+    
     
     
     private func loadMon() -> [Mon]? {
@@ -158,5 +158,4 @@ class MonTableViewController: UITableViewController {
         }
         return caught
     }
-    
 }
