@@ -9,8 +9,11 @@
 import UIKit
 import AVFoundation
 import os.log
+import SceneKit
+import CoreLocation
 
-class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, CLLocationManagerDelegate {
+    
     
     @IBOutlet weak var messagelabel: UILabel!
     var captureSession:AVCaptureSession?
@@ -21,6 +24,15 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     var monID: String?
     var hasBeenFound = false
     var user: User?
+    
+    // AR
+    //var locationManager = CLLocationManager()
+    //var heading: Double = 0
+    //var userLocation = CLLocation()
+    
+    let scene = SCNScene()
+    let cameraNode = SCNNode()
+    let targetNode = SCNNode(geometry: SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +81,16 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
                 view.bringSubview(toFront: qrCodeFrameView)
             }
             
+            // AR
+            //self.locationManager.delegate = self
+            //2
+            //self.locationManager.startUpdatingHeading()
+            
+            //sceneView.scene = scene
+            //cameraNode.camera = SCNCamera()
+            //cameraNode.position = SCNVector3(x: 0, y: 0, z: 10)
+            //scene.rootNode.addChildNode(cameraNode)
+            
         
         } catch {
             // If any error occurs, simply print it out and don't continue any more
@@ -104,6 +126,8 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             let end_time = Date()
             user?.setEndTime(date: end_time)
             saveUser()
+            sendEndTimeToDatabase()
+            print("finished")
         }
         let selectedMon = getMonWith(Id: monID!)
         monDetailViewController.mon = selectedMon
@@ -133,7 +157,7 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
             if metadataObj.stringValue != nil {
-                if (1...(mon.count + 1)) ~= (Int(metadataObj.stringValue)!) {
+                if (getMonWith( Id: metadataObj.stringValue ) != nil) {
                     monID = metadataObj.stringValue
                     if hasBeenFound == false {
                         hasBeenFound = true
@@ -173,15 +197,10 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
 
     private func foundMonWith(Id: String){
         let monster = getMonWith(Id: Id)!
-        let prevCaught = getCaught()
         
         monster.setFound(found: true)
         saveMon()
         
-        let newCaught = getCaught()
-        if (prevCaught == (mon.count - 1) && newCaught == mon.count) {
-            sendEndTimeToDatabase()
-        }
         sendCaughtToDatabase()
     }
     
@@ -208,13 +227,14 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     }
     
     private func sendCaughtToDatabase() {
-        var request = URLRequest(url: URL(string: "https://www.thisismylink.com/postName.php")!)
+        var request = URLRequest(url: URL(string: "https://labday01.embl.de/updateCaught.php")!)
         request.httpMethod = "POST"
         let postString = "name=\((user?.getName())!)&caught=\(getCaught())"
         request.httpBody = postString.data(using: .utf8)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let _ = data, error == nil else {          // check for fundamental networking error
+                print("\(String(describing: error))")
                 return
             }
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
@@ -225,13 +245,22 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     }
     
     private func sendEndTimeToDatabase() {
-        var request = URLRequest(url: URL(string: "https://www.thisismylink.com/postName.php")!)
+        var request = URLRequest(url: URL(string: "https://labday01.embl.de/finish.php")!)
         request.httpMethod = "POST"
-        let postString = "name=\((user?.getName())!)&end_time=\(Date())"
+        
+        let end_time = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let end = dateFormatter.string(from: end_time)
+        
+        let postString = "name=\((user?.getName())!)&end_time=\(end)"
         request.httpBody = postString.data(using: .utf8)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let _ = data, error == nil else {          // check for fundamental networking error
+                print("\(String(describing: error))")
+                self.sendEndTimeToDatabase()
                 return
             }
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors

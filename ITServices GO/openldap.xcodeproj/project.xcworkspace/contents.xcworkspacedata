@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/Thomas/Documents/ITServices GO/ITServices GO.xcodeproj">
+      location = "self:openldap.xcodeproj">
    </FileRef>
 </Workspace>
